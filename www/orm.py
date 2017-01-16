@@ -21,7 +21,7 @@ def create_pool(loop, **kw):
         port=kw.get('port', 3306),
         user=kw['user'],
         password=kw['password'],
-        db=kw['db'],
+        db=kw['database'],
         charset=kw.get('charset', 'utf8'),
         autocommit=kw.get('autocommit', True),
         maxsize=kw.get('maxsize', 10),
@@ -55,12 +55,14 @@ def execute(sql, args):
     log(sql)
     with(yield from __pool) as conn:
         try:
-            cur = yield from conn.coursor()
+            cur = yield from conn.cursor(aiomysql.DictCursor)
             yield from cur.execute(sql.replace('?', '%s'), args)
-            affected = cur.rowcount()
+            affected = cur.rowcount
             yield from cur.close()
         except BaseException as e:
             raise
+        finally:
+            conn.close()
         return affected
 
 

@@ -13,7 +13,7 @@ configs = {
         'port': 3306,
         'user': 'root',
         'password': '1657',
-        'db': 'hotel'
+        'db': 'webapp'
     },
     'session': {
         'secret': 'ae86'

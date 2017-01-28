@@ -12,12 +12,12 @@ def get(path):
     '''
     def decorator(func):
         @functools.wraps(func)
-        def wrappers(*args,**kw):
+        def wrapper(*args,**kw):
             return func(*args,**kw)
-            wrapper.__method__='GET'
-            wrapper.__route__=path
-            return wrapper
-        return decorator
+        wrapper.__method__='GET'
+        wrapper.__route__=path
+        return wrapper
+    return decorator
 
 def post(path):
     '''
@@ -34,7 +34,7 @@ def post(path):
     
 def get_required_kw_args(fn):
     args=[]
-    params = inspect.signature(fn).paramters
+    params = inspect.signature(fn).parameters
     for name,param in params.items():
         if param.kind == inspect.Parameter.KEYWORD_ONLY and param.default == inspect.Parameter.empty:
             args.append(name)

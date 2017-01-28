@@ -110,7 +110,7 @@ def datetime_filter(t):
 
 async def init(loop):
     #创建自定义数据库连接池
-    await orm.create_pool(loop=loop, host='127.0.0.1', port=3306, user='root', password='1657', db='hotel')
+    await orm.create_pool(loop=loop, host='127.0.0.1', port=3306, user='root', password='1657', db='webapp')
     app = web.Application(loop=loop, middlewares=[
         logger_factory, response_factory
     ])

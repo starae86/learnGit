@@ -4,7 +4,7 @@
 import asyncio,os,inspect,logging,functools
 from urllib import parse
 from aiohttp import web
-
+from apis import APIError
 
 def get(path):
     '''
@@ -36,7 +36,7 @@ def get_required_kw_args(fn):
     args=[]
     params = inspect.signature(fn).paramters
     for name,param in params.items():
-        if parm.kind == inspect.Parameter.KEYWORD_ONLY and param.default == inspect.Parameter.empty:
+        if param.kind == inspect.Parameter.KEYWORD_ONLY and param.default == inspect.Parameter.empty:
             args.append(name)
     return tuple(args)
 

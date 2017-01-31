@@ -8,8 +8,9 @@ import re, time, json, logging, hashlib, base64, asyncio
 from coroweb import get, post
 from aiohttp import web
 from Model import User, Comment, Blog, next_id
-from apis import APIError,APIValueError,APIPermissionError
+from apis import APIError,APIValueError,APIPermissionError,Page
 from config import configs
+
 
 
 COOKIE_NAME = 'awesession'
@@ -175,6 +176,13 @@ def get_blog(id):
         'comments': comments
     }
 
+@get('/manage/blogs')
+def manage_blogs(*, page='1'):
+    return {
+        '__template__': 'manage_blogs.html',
+        'page_index': get_page_index(page)
+    }
+
 @get('/manage/blogs/create')
 def manage_create_blog():
     return {
@@ -183,6 +191,21 @@ def manage_create_blog():
         'action': '/api/blogs'
     }
 
+@get('/api/blogs')
+def api_blogs(*, page='1'):
+    page_index = get_page_index(page)
+    num = yield from Blog.findNumber('count(id)')
+    p = Page(num, page_index)
+    if num == 0:
+        return dict(page=p, blogs=())
+    blogs = yield from Blog.findAll(orderBy='created_at desc', limit=(p.offset, p.limit))
+    return dict(page=p, blogs=blogs)
+
+@get('/api/blogs/{id}')
+def api_get_blog(*, id):
+    blog = yield from Blog.find(id)
+    return blog
+
 @get('/api/blogs/{id}')
 def api_get_blog(*, id):
     blog = yield from Blog.find(id)
@@ -190,7 +213,7 @@ def api_get_blog(*, id):
 
 @post('/api/blogs')
 def api_create_blog(request,*,name,summary,content):
-    # check_admin(request)
+    check_admin(request)
     if not name or not name.strip():
         raise APIValueError('name','name cannot be empty')
     if not summary or not summary.strip():

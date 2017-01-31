@@ -16,6 +16,6 @@ configs = {
         'db': 'webapp'
     },
     'session': {
-        'secret': 'ae86'
+        'secret': 'user'
     }
 }

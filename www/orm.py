@@ -310,18 +310,18 @@ class Model(dict, metaclass=ModelMetaclass):
             logging.warning('failed to remove by primary key: affected rows: %s' % rows)
 
 
-if __name__ == '__main__':
-    class User(Model):
-        # 定义类的属性到列的映射：
-        id = IntegerField('id', primary_key=True)
-        name = StringField('username')
-        email = StringField('email')
-        password = StringField('password')
-
-
-    # 创建一个实例：
-    u = User(id=12345, name='xpc', email='xpc@126.com', password='password')
-    print(u)
-    # 保存到数据库：
-    u.save()
-    print(u)
+# if __name__ == '__main__':
+#     class User(Model):
+#         # 定义类的属性到列的映射：
+#         id = IntegerField('id', primary_key=True)
+#         name = StringField('username')
+#         email = StringField('email')
+#         password = StringField('password')
+#
+#
+#     # 创建一个实例：
+#     u = User(id=12345, name='xpc', email='xpc@126.com', password='password')
+#     print(u)
+#     # 保存到数据库：
+#     u.save()
+#     print(u)
